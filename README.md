@@ -9,6 +9,7 @@ THE TEARSECONDS is automatically appended to give a somewhat unique file name. I
 but was in a rush to test and send the output to someone who is helping debug an issue.
 
 Future:
-1) Fix format fro browsers.
-2) Pass in runtimeprameters to select the different or all commands.
-3) add new commands that are useful.
+1) Fix format for browsers.
+2) Pass in runtime parameters to select the different or all commands.
+3) Add new commands that are useful.
+4) Auto paste to pastebin.com
