@@ -8,8 +8,18 @@ Downlaod the script and chmod +x for exuction and it should run. The output file
 THE TEARSECONDS is automatically appended to give a somewhat unique file name. I will probably fix that later
 but was in a rush to test and send the output to someone who is helping debug an issue.
 
+To view the xml format try using this web page:
+http://www.webtoolkitonline.com/xml-formatter.html
+
+Copy all the output and paste it into the window.
+
+
+
+
 Future:
-1) Fix format for browsers.
+1) Fix format for browsers. Have an xml stylesheet available but needs linking in or passing along with the file.
 2) Pass in runtime parameters to select the different or all commands.
 3) Add new commands that are useful.
+	lsmod added
+	syslog to be added
 4) Auto paste to pastebin.com
