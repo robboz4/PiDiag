@@ -40,6 +40,12 @@ echo "  LSUSB OUPUT:" >> $Log
 sudo lsusb >>  $Log
 echo "</usb>" >> $Log
 
+#lsmod data
+echo "<lsmod>" >> $Log
+echo "  LSMOD OUPUT:" >> $Log
+sudo lsmod >>  $Log
+echo "</lsmod>" >> $Log
+
 #dmesg data
 echo "<dmesg>" >> $Log
 echo " DMESG OUTPUT:  " >>$Log
