@@ -1,20 +1,25 @@
 #!/bin/bash
 
-# A script to caputure  details to help debug OctoPi ( or other Pi ) related  issues.
+# A script to capture  details to help debug OctoPi ( or other Pi ) related  issues.
 # It captures output from:
+# uname
+# python
 # lsusb
+# lsmod
 # dmesg
 # ifconfig
 # iwlist 
 # wpa_cli
 # It outputs the results to an ASCII or text file with  some XML tabs for viewing or searching better
 # Dave Robinson 2/15/16
-# Version 1.0.0
+# Version 1.2.0
 
-#Notes:
-# Works but xml output doesn't format output in browsers. It does in this
-# free onlne XMl viewer http://www.webtoolkitonline.com/xml-formatter.html
-# Looking into that.
+# Notes:
+# Still working on formatting better fro xml output. 
+# Added Octoprint version
+# Added last 100 lines of syslog
+# Trying to add Python version number but for some reason it's not passing it into the output file
+# bumped   the version  number to 1.2.0
 
 
 TODAY=`date +%F%M`
@@ -23,6 +28,8 @@ Log="Diagout$TODAY.txt"
 
 #Creates file with xml head
 echo "<?xml version=\"1.0\" ?>" >$Log
+# echo "<?xml-stylesheet type='text/xsl' href='http://clubrobbo.synology.me:80/Robboz-_Designs/Diagout.xsl' ?>" >> $Log
+echo "<?xml-stylesheet type='text/xsl' href='Diagout.xsl' ?>" >> $Log
 
 #Opening tag
 echo "<log>" >>$Log
@@ -32,7 +39,12 @@ echo "Log created on " `date` >>$Log
 echo "<system>">> $Log
 echo " ON SYSTEM: " >>$Log
 uname -a  >> $Log
-echo "</system>">>$Log
+
+echo "Octprint Version:"  `cat /etc/octopi_version`  >> $Log
+Python_ver= `python --version`
+ 
+echo "Python version: " `/home/pi/oprint/bin/python --version` >> $Log
+echo "</system>">> $Log
 
 #lsusb data
 echo "<usb>" >> $Log
@@ -51,6 +63,14 @@ echo "<dmesg>" >> $Log
 echo " DMESG OUTPUT:  " >>$Log
 dmesg >> $Log
 echo "</dmesg>" >> $Log
+
+#/var/log/syslog last 100 lines only
+
+echo "<SysLog>">> $Log
+#SysLog=`tail -100 /var/log/syslog` 
+tail -100 /var/log/syslog >> $Log
+#echo $SysLog >> $Log
+echo "</SysLog>" >> $Log
 
 #wifi data
 echo "<wifi>" >>$Log
