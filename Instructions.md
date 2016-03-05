@@ -8,7 +8,10 @@ you can mountt he SD card back inyour computer
 can read the file on the  SD on your computer and  upload it if requested to do so to the person helping you.
 
 If you rename the output file with the extension  ".xml" a browser will open it
-and try to format the tabs. I'm still working on this feature. 
+and try to format the tabs allowing the collapsing or expanding of the various ouyput sections for easier viewing.
+I'm still working on this feature. 
+
+
 To run the file type:
 
 cd /boot
@@ -16,8 +19,8 @@ chmod +x diag_info.sh
 sudo ./diag_info.sh
 
 The output file should be something like Diag2016-XX-XXX.txt
-you can view in a browser or text editor. If you rename your file to.xml,
-the browser or tetx editor will allow the collapsing or expanding of the various ouput sections for easier viewing.
+
+
 
 
 
