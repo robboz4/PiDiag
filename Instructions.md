@@ -8,7 +8,7 @@ you can mountt he SD card back inyour computer
 can read the file on the  SD on your computer and  upload it if requested to do so to the person helping you.
 
 If you rename the output file with the extension  ".xml" a browser will open it
-and try to format the tabs allowing the collapsing or expanding of the various ouyput sections for easier viewing.
+and try to format the tabs allowing the collapsing or expanding of the various output sections for easier viewing.
 I'm still working on this feature. 
 
 
