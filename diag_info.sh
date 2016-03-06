@@ -41,9 +41,10 @@ echo " ON SYSTEM: " >>$Log
 uname -a  >> $Log
 
 echo "Octprint Version:"  `cat /etc/octopi_version`  >> $Log
-Python_ver= `python --version`
- 
-echo "Python version: " `/home/pi/oprint/bin/python --version` >> $Log
+
+Python_ver=$(python --version 2>&1) 
+echo "Python version: " $Python_ver >> $Log
+
 echo "</system>">> $Log
 
 #lsusb data
