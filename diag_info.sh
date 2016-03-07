@@ -12,14 +12,15 @@
 # wpa_cli
 # It outputs the results to an ASCII or text file with  some XML tabs for viewing or searching better
 # Dave Robinson 2/15/16
-# Version 1.2.0
+# Version 2.0.0
+# 3/6/16 
+# Added paste to pastebin if a working network is detected. 
+# 
 
 # Notes:
-# Still working on formatting better fro xml output. 
-# Added Octoprint version
-# Added last 100 lines of syslog
-# Trying to add Python version number but for some reason it's not passing it into the output file
-# bumped   the version  number to 1.2.0
+# Still working on formatting better for xml output. The links to Tom's file should work.
+# 
+# bumped   the version  number to 2.0.0
 
 
 TODAY=`date +%F%M`
@@ -28,8 +29,8 @@ Log="Diagout$TODAY.txt"
 
 #Creates file with xml head
 echo "<?xml version=\"1.0\" ?>" >$Log
-# echo "<?xml-stylesheet type='text/xsl' href='http://clubrobbo.synology.me:80/Robboz-_Designs/Diagout.xsl' ?>" >> $Log
-echo "<?xml-stylesheet type='text/xsl' href='Diagout.xsl' ?>" >> $Log
+echo "<?xml-stylesheet type='text/xsl' href='http://tommilner.org/diagout/diagout.xsl' ?>" >> $Log
+#echo "<?xml-stylesheet type='text/xsl' href='Diagout.xsl' ?>" >> $Log
 
 #Opening tag
 echo "<log>" >>$Log
@@ -91,3 +92,45 @@ echo " End of data captured. " >>$Log
 
 #Closing tag
 echo "</log>" >> $Log
+
+
+# Now seeing if we can send the file to pastebin.com or get the user 
+# to manually paste the details in.
+
+Result=$(ping -c 2 -t 30 www.pastebin.com )
+
+# Added extra time as pining www.pastebin.com became sluggish during coding.
+
+
+	
+if [ $? -eq 0 ]
+then
+  	echo "Ping successful we have network! "
+  	echo ""
+
+#
+# The following code borrowed from https://gist.github.com/hashworks/14b730861c161e36d223
+#
+    API_DEV_KEY="e02c17d8e1cce421740ecad74e65d5fc"
+    API_USER_KEY=""
+    EXPIRE_DATE="1M"
+# Set to expire in 1 month
+    PRIVATE="0"
+    INPUT=$(cat ${Log})
+    NAME=$Log
+    FORMAT="xml"
+
+    querystring="api_option=paste&api_dev_key=${API_DEV_KEY}&api_user_key=${API_USER_KEY}&api_paste_expire_date=${EXPIRE_DATE}&api_paste_private=${PRIVATE}&api_paste_code=${INPUT}&api_paste_name=${NAME}${FORMAT}"
+
+    Paste_url=$(curl -d "${querystring}" http://pastebin.com/api/api_post.php )
+
+    echo "Please pass this url to the requester of the information." $Paste_url
+
+
+else
+  	echo "No Network must paste file manually " 
+  	echo ""
+  	echo "Please cut & paste the file " $Log " to www.pastebin.com and pass the link to the requester."
+fi
+
+# The End.
