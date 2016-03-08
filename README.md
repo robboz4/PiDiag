@@ -9,6 +9,18 @@ The script will then test to see if there is a working network by pinging www.pa
 it will upload the file for them If not it will ask them to do it.
 
 
+The PASTEBIN upload code was leveraged from this program:
+
+https://gist.github.com/hashworks/14b730861c161e36d223
+
+Many thanks to the author for creating it.
+
+The xml stylesheet reference is from a good friend who helps me out with all my programming:
+
+www.tommilner.org
+
+
+
 
 
 
