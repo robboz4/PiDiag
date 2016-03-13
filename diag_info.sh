@@ -12,15 +12,18 @@
 # wpa_cli
 # It outputs the results to an ASCII or text file with  some XML tabs for viewing or searching better
 # Dave Robinson 2/15/16
-# Version 2.0.0
+# Version 2.0.1
 # 3/6/16 
 # Added paste to pastebin if a working network is detected. 
+# 3/13/16 
+# Fixed typo
 # 
+# Bumped   the version  number to 2.0.1
 
 # Notes:
 # Still working on formatting better for xml output. The links to Tom's file should work.
 # 
-# bumped   the version  number to 2.0.0
+# 
 
 
 TODAY=`date +%F%M`
@@ -41,7 +44,7 @@ echo "<system>">> $Log
 echo " ON SYSTEM: " >>$Log
 uname -a  >> $Log
 
-echo "Octprint Version:"  `cat /etc/octopi_version`  >> $Log
+echo "Octoprint Version:"  `cat /etc/octopi_version`  >> $Log
 
 Python_ver=$(python --version 2>&1) 
 echo "Python version: " $Python_ver >> $Log
@@ -97,7 +100,7 @@ echo "</log>" >> $Log
 # Now seeing if we can send the file to pastebin.com or get the user 
 # to manually paste the details in.
 
-Result=$(ping -c 2 -t 30 www.pastebin.com )
+Result=$(ping -c 2 -t 30 www.pastebin.com 2>&1)
 
 # Added extra time as pining www.pastebin.com became sluggish during coding.
 
