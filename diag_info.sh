@@ -19,6 +19,8 @@
 # Fixed typo
 # 
 # Bumped   the version  number to 2.0.1
+# Altered name for upload to pastebin.com
+# Bumped   the version  number to 2.0.2
 
 # Notes:
 # Still working on formatting better for xml output. The links to Tom's file should work.
@@ -29,7 +31,7 @@
 TODAY=`date +%F%M`
 #Used to generate a sudo unique file name
 Log="Diagout$TODAY.txt"
-
+PASTEBIN_Name="Diagout$TODAY."
 #Creates file with xml head
 echo "<?xml version=\"1.0\" ?>" >$Log
 echo "<?xml-stylesheet type='text/xsl' href='http://tommilner.org/diagout/diagout.xsl' ?>" >> $Log
@@ -120,7 +122,7 @@ then
 # Set to expire in 1 month
     PRIVATE="0"
     INPUT=$(cat ${Log})
-    NAME=$Log
+    NAME=$PASTEBIN_Name
     FORMAT="xml"
 
     querystring="api_option=paste&api_dev_key=${API_DEV_KEY}&api_user_key=${API_USER_KEY}&api_paste_expire_date=${EXPIRE_DATE}&api_paste_private=${PRIVATE}&api_paste_code=${INPUT}&api_paste_name=${NAME}${FORMAT}"
