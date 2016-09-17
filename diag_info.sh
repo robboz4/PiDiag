@@ -21,6 +21,7 @@
 # Bumped   the version  number to 2.0.1
 # Altered name for upload to pastebin.com
 # Bumped   the version  number to 2.0.2
+# Bumped   the version number to 2.0.3 Added PiGMi data collection
 
 # Notes:
 # Still working on formatting better for xml output. The links to Tom's file should work.
