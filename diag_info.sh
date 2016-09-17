@@ -50,7 +50,16 @@ echo "Octoprint Version:"  `cat /etc/octopi_version`  >> $Log
 
 Python_ver=$(python --version 2>&1) 
 echo "Python version: " $Python_ver >> $Log
-
+Apache_ver=$(apache2 -v 2>&1)
+echo "Apache version: " $Apache_ver    >> $Log
+Php_ver=$(php -v 2>&1)
+echo "PHP Version: " $Php_ver  >> $Log
+GPIO_ver=$(gpio -v 2>&1 | head -n1)
+echo "gpioutility Version: "  $GPIO_ver >> $Log
+GPIO_Set=$(gpio readall 2<&1)
+echo "GPIO Pin settings: "  >> $Log 
+echo ""  >> $Log
+echo $GPIO_Set >> $Log
 echo "</system>">> $Log
 
 #lsusb data
