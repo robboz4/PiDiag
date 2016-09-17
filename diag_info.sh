@@ -46,6 +46,9 @@ echo "Log created on " `date` >>$Log
 echo "<system>">> $Log
 echo " ON SYSTEM: " >>$Log
 uname -a  >> $Log
+echo" Network Info: " >> $Log
+
+ifconfig >> $Log
 
 echo "Octoprint Version:"  `cat /etc/octopi_version`  >> $Log
 
@@ -61,6 +64,7 @@ GPIO_Set=$(gpio readall 2<&1)
 echo "GPIO Pin settings: "  >> $Log 
 echo ""  >> $Log
 echo $GPIO_Set >> $Log
+
 echo "</system>">> $Log
 
 #lsusb data
