@@ -55,8 +55,14 @@ echo "diag_info version = 2.0.4 " >> $Log
 echo "<system>">> $Log
 echo " ON SYSTEM: " >>$Log
 uname -a  >> $Log
+<<<<<<< HEAD
 echo "Known as:" >> $Log
 hostname  >> $Log
+=======
+echo" Network Info: " >> $Log
+
+ifconfig >> $Log
+>>>>>>> origin/master
 
 echo "Octoprint Version:"  `cat /etc/octopi_version`  >> $Log
 
@@ -71,9 +77,14 @@ echo "gpioutility Version: "  $GPIO_ver >> $Log
 
 echo "GPIO Pin settings: "  >> $Log 
 echo ""  >> $Log
+<<<<<<< HEAD
 gpio readall >> $Log
 echo "Disk Space:" >> $Log
 sudo df -h >> $Log 
+=======
+echo $GPIO_Set >> $Log
+
+>>>>>>> origin/master
 echo "</system>">> $Log
 
 #lsusb data
