@@ -25,7 +25,8 @@
 # Bumped   the version number to 2.0.4 Added df -h, version string, hostname
 # Rearranged the collection of data. Added a parameter to dmesg to keep the output
 # smaller. Not all the log gets posted to pastebin, but all data is captured.
-#  
+# Added CPU info, CPU temp and free mmemory data for the Pi
+# Bumped to 2.0.5 1/7/17
 
 # Notes:
 # Still working on formatting better for xml output. The links to Tom's file should work.
@@ -49,20 +50,23 @@ echo "<?xml-stylesheet type='text/xsl' href='http://tommilner.org/diagout/diagou
 #Opening tag
 echo "<log>" >>$Log
 echo "Log created on " `date` >>$Log
-echo "diag_info version = 2.0.4 " >> $Log
+echo "diag_info version = 2.0.5 " >> $Log
 
 #System name
 echo "<system>">> $Log
 echo " ON SYSTEM: " >>$Log
 uname -a  >> $Log
-<<<<<<< HEAD
 echo "Known as:" >> $Log
 hostname  >> $Log
-=======
-echo" Network Info: " >> $Log
+echo "Pi Details:" >> $Log
+cat /proc/cpuinfo >> $Log
+echo "CPU Temperature is : " >> $Log
+vcgencmd measure_temp >> $Log
 
-ifconfig >> $Log
->>>>>>> origin/master
+echo "Memory free space  table : " >> $Log
+
+free -o -h >> $Log
+
 
 echo "Octoprint Version:"  `cat /etc/octopi_version`  >> $Log
 
@@ -77,14 +81,9 @@ echo "gpioutility Version: "  $GPIO_ver >> $Log
 
 echo "GPIO Pin settings: "  >> $Log 
 echo ""  >> $Log
-<<<<<<< HEAD
 gpio readall >> $Log
 echo "Disk Space:" >> $Log
 sudo df -h >> $Log 
-=======
-echo $GPIO_Set >> $Log
-
->>>>>>> origin/master
 echo "</system>">> $Log
 
 #lsusb data
