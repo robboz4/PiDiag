@@ -27,10 +27,14 @@
 # smaller. Not all the log gets posted to pastebin, but all data is captured.
 # Added CPU info, CPU temp and free mmemory data for the Pi
 # Bumped to 2.0.5 1/7/17
+# Bumped to 2.0.6 3/5/17 - fixed xml formatting issues. 
+#	1) Added sed script to format less-than and ampersand and double ampersand issues
+#      obtained from here: http://daemonforums.org/showthread.php?t=4054 
+#   2) Changed xml headers and point to a local xsl file instead of a domain file. This
+#	   works on Safari, but not on Chrome. The file must be in the same directory as the 
+#	   xml file for it to format nicely. Also change the text (.txt) file to xml (.xml).
 
 # Notes:
-# Still working on formatting better for xml output. The links to Tom's file should work.
-# 
 # pastebin not getting a complete upload...
 
 
@@ -43,14 +47,17 @@ echo "Please keep the file in case the requester needs information that did not 
 echo "Starting to collect data to file " $Log
 
 #Creates file with xml head
-echo "<?xml version=\"1.0\" ?>" >$Log
-echo "<?xml-stylesheet type='text/xsl' href='http://tommilner.org/diagout/diagout.xsl' ?>" >> $Log
-#echo "<?xml-stylesheet type='text/xsl' href='Diagout.xsl' ?>" >> $Log
+
+echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" >$Log
+echo "<?xml-stylesheet type=\"text/xsl\" href=\"diagout.xsl\"?>" >>$Log
+
+
+
 
 #Opening tag
 echo "<log>" >>$Log
 echo "Log created on " `date` >>$Log
-echo "diag_info version = 2.0.5 " >> $Log
+echo "diag_info version = 2.0.6 " >> $Log
 
 #System name
 echo "<system>">> $Log
@@ -115,8 +122,9 @@ echo "</iwlist>" >>$Log
 echo "</wifi>" >>$Log
 
 echo "<SysLog>">> $Log
-#SysLog=`tail -100 /var/log/syslog` 
-tail -100 /var/log/syslog >> $Log
+ 
+# sed command to strip out lt and & issues
+tail -100 /var/log/syslog  | sed -e 's~&~\&amp;~g' -e 's~<~\&lt;~g' >> $Log
 #echo $SysLog >> $Log
 echo "</SysLog>" >> $Log
 
@@ -124,7 +132,7 @@ echo "</SysLog>" >> $Log
 #dmesg data
 echo "<dmesg>" >> $Log
 echo " DMESG OUTPUT:  " >>$Log
-dmesg -l info >> $Log
+dmesg -l info | sed -e 's~&~\&amp;~g' -e 's~<~\&lt;~g'  >> $Log
 echo "</dmesg>" >> $Log
 
 #/var/log/syslog last 100 lines only
@@ -143,7 +151,7 @@ echo "</log>" >> $Log
 
 Result=$(ping -c 2 -t 30 www.pastebin.com 2>&1)
 
-# Added extra time as pining www.pastebin.com became sluggish during coding.
+# Added extra time as pinging www.pastebin.com became sluggish during coding.
 
 
 	
