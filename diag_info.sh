@@ -33,6 +33,9 @@
 #   2) Changed xml headers and point to a local xsl file instead of a domain file. This
 #	   works on Safari, but not on Chrome. The file must be in the same directory as the 
 #	   xml file for it to format nicely. Also change the text (.txt) file to xml (.xml).
+# Bumped to 2.0.7 3/20/17 Added error checking to all commands to make the output  look
+# more profressional. Also did an check on the lan configuration to see if Wifi  was set up.
+
 
 # Notes:
 # pastebin not getting a complete upload...
@@ -57,7 +60,7 @@ echo "<?xml-stylesheet type=\"text/xsl\" href=\"diagout.xsl\"?>" >>$Log
 #Opening tag
 echo "<log>" >>$Log
 echo "Log created on " `date` >>$Log
-echo "diag_info version = 2.0.6 " >> $Log
+echo "diag_info version = 2.0.7 " >> $Log
 
 #System name
 echo "<system>">> $Log
@@ -67,28 +70,78 @@ echo "Known as:" >> $Log
 hostname  >> $Log
 echo "Pi Details:" >> $Log
 cat /proc/cpuinfo >> $Log
-echo "CPU Temperature is : " >> $Log
-vcgencmd measure_temp >> $Log
+
+echo -n "CPU  " >> $Log
+CPU_temp=$(vcgencmd measure_temp 2>&1) 
+echo $CPU_temp  >> $Log
+echo >> $Log
 
 echo "Memory free space  table : " >> $Log
 
 free -o -h >> $Log
+ls /etc/octopi_version 2>&1
+
+if [ $? -eq 0 ]
+   then
+
+    echo "Octoprint Version:"  `cat /etc/octopi_version`  >> $Log
+    else
+
+   echo "Octoprint not installed." >> $Log 
+
+fi
 
 
-echo "Octoprint Version:"  `cat /etc/octopi_version`  >> $Log
+Python_ver=$(python --version 2>&1)
 
-Python_ver=$(python --version 2>&1) 
-echo "Python version: " $Python_ver >> $Log
+if [ $? -eq 0 ]
+   then
+ 
+    echo "Python version: " $Python_ver >> $Log
+
+   else
+   echo "Python not installed." >>$Log
+
+
+fi
 Apache_ver=$(apache2 -v 2>&1)
-echo "Apache version: " $Apache_ver    >> $Log
-Php_ver=$(php -v 2>&1)
-echo "PHP Version: " $Php_ver  >> $Log
-GPIO_ver=$(gpio -v 2>&1 | head -n1)
-echo "gpioutility Version: "  $GPIO_ver >> $Log
 
-echo "GPIO Pin settings: "  >> $Log 
-echo ""  >> $Log
-gpio readall >> $Log
+if [ $? -eq 0 ] 
+   then
+   echo "Apache version: " $Apache_ver    >> $Log
+   else
+   echo "Apache not installed. " >>$Log
+
+fi
+
+Php_ver=$(php -v 2>&1)
+if [ $? -eq 0 ] 
+   then
+   echo "PHP Version: " $Php_ver  >> $Log
+   else
+   echo "PHP not installed." >>$Log
+
+fi
+
+
+# GPIO_ver=$(gpio -v 2>&1 | head -n1)
+gpio -v 2>&1
+if [ $? -ne 0 ] 
+   then
+    echo "gpio Utility not installed." >>$Log
+   else
+    GPIO_ver=$(gpio -v 2>&1 | head -n1)
+    echo "gpioutility Version: "  $GPIO_ver >> $Log
+
+    echo "GPIO Pin settings: "  >> $Log
+    gpio readall >> $Log 
+    echo ""  >> $Log
+#    else
+#    echo "gpio Utility not installed." >>$Log
+#     gpio readall >> $Log
+
+fi
+
 echo "Disk Space:" >> $Log
 sudo df -h >> $Log 
 echo "</system>">> $Log
@@ -107,17 +160,25 @@ echo "</lsmod>" >> $Log
 
 #wifi data
 echo "<wifi>" >>$Log
-echo  " WIFI OUTPUT: " >>$Log
+#echo  " NETWORK OUTPUT: " >>$Log
 echo "<ifconfig>" >>$Log
 ifconfig >> $Log
 echo "</ifconfig>" >>$Log
-echo "<wpa_cli>" >> $Log
-sudo wpa_cli scan >> $Log && sudo wpa_cli scan_results >> $Log
-echo "</wpa_cli>" >>$Log
-echo "<iwlist>" >>$Log
-sleep 5
+
+ifconfig | grep wlan0
+if [ $? -eq 0 ]
+   then
+   echo "<wpa_cli>" >> $Log
+   sudo wpa_cli scan >> $Log && sudo wpa_cli scan_results >> $Log
+   echo "</wpa_cli>" >>$Log
+   echo "<iwlist>" >>$Log
+   sleep 5
 # Above sleep added for P3.
-sudo iwlist wlan0 scan >>$Log
+   sudo iwlist wlan0 scan >>$Log
+   else
+   echo "No wlan0 configured. " >>$Log
+fi
+
 echo "</iwlist>" >>$Log
 echo "</wifi>" >>$Log
 
