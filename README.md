@@ -4,14 +4,17 @@ Debug commands for setting up a Pi
 I created this script to capture information people ask for when they are asking for help 
 in setting up a Pi or Octoprint. The output has xml tags to seperate the different 
 commands and their outputs. Download the script and chmod +x for execution and it should
-run. The output file is names DiagoutYEARSECONDS.txt. The YEARSECONDS is automatically 
+run. The output file is names DiagoutYEARSECONDS.xml. The YEARSECONDS is automatically 
 appended to give a somewhat unique file name.  The script will then test to see if there
 is a working network by pinging www.pastebin.com. If successful it will upload the file.
 If not it will ask for you to do it. Sometimes not the  whole file gets upload, so 
 keep the file as it might be needed by the person asking for the informations.
 
+Currently collects info on the Pi (HW & SW), various applications (PHP, Apache2, wiringPi)
+network data, syslog (last 100 entires) and the dmesg output.
+
 To use the xml formatting download the diagout.xsl file to the same directory as the 
-output file. Change the .txt extension to .xml and have a browser (Safari works) open it.
+output fileand have a browser (Safari works) open it.
 You should see each section highlighted. If the format file is not there, then some
 browsers will diaplay the file with handles that allow the various sections to
 be collapsed for easier viewing.
@@ -41,5 +44,5 @@ http://daemonforums.org/showthread.php?t=4054
 
 Future:
 1) Pass in runtime parameters to select the different or all commands. 
-2) Underssand pastebin upload issue.
+2) Issue with pastebin seems to be && even after repalcing theis string with html &amp;
 
