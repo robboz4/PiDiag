@@ -36,7 +36,7 @@
 # Bumped to 2.0.6 3/20/17 Added error checking to all commands to make the output  look
 # more profressional. Also did an check on the lan configuration to see if Wifi  was set up.
 # Bumped to 2.0.7 3/26/17 some more formag tidying.
-# Bumoed to 2.0.8 3/28/17 Added os release version and uptime count.
+# Bumped to 2.0.8 3/28/17 Added os release version and uptime count.
 
 # Notes:
 # pastebin not getting a complete upload...
@@ -65,7 +65,7 @@ echo "diag_info version = 2.0.8 " >> $Log
 
 #System name
 echo "<system>">> $Log
-echo -n " ON SYSTEM: " >>$Log
+echo -n "ON SYSTEM: " >>$Log
 uname -a  >> $Log
 echo -n "Known as: " >> $Log
 hostname  >> $Log
@@ -123,7 +123,8 @@ fi
 Php_ver=$(php -v 2>&1)
 if [ $? -eq 0 ] 
    then
-   echo "PHP Version: " $Php_ver  >> $Log
+   echo -n "PHP Version: " >> $Log
+   php -v 2>&1 >> $Log
    else
    echo "PHP not installed." >>$Log
 
