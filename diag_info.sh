@@ -33,9 +33,10 @@
 #   2) Changed xml headers and point to a local xsl file instead of a domain file. This
 #	   works on Safari, but not on Chrome. The file must be in the same directory as the 
 #	   xml file for it to format nicely. Also change the text (.txt) file to xml (.xml).
-# Bumped to 2.0.7 3/20/17 Added error checking to all commands to make the output  look
+# Bumped to 2.0.6 3/20/17 Added error checking to all commands to make the output  look
 # more profressional. Also did an check on the lan configuration to see if Wifi  was set up.
-
+# Bumped to 2.0.7 3/26/17 some more formag tidying.
+# Bumoed to 2.0.8 3/28/17 Added os release version and uptime count.
 
 # Notes:
 # pastebin not getting a complete upload...
@@ -43,7 +44,7 @@
 
 TODAY=`date +%F%M`
 #Used to generate a sudo unique file name
-Log="Diagout$TODAY.txt"
+Log="Diagout$TODAY.xml"
 PASTEBIN_Name="Diagout$TODAY."
 echo "This program can create a large file that might not get fully uploaded to pastebin."
 echo "Please keep the file in case the requester needs information that did not get to pastebin."
@@ -60,14 +61,19 @@ echo "<?xml-stylesheet type=\"text/xsl\" href=\"diagout.xsl\"?>" >>$Log
 #Opening tag
 echo "<log>" >>$Log
 echo "Log created on " `date` >>$Log
-echo "diag_info version = 2.0.7 " >> $Log
+echo "diag_info version = 2.0.8 " >> $Log
 
 #System name
 echo "<system>">> $Log
-echo " ON SYSTEM: " >>$Log
+echo -n " ON SYSTEM: " >>$Log
 uname -a  >> $Log
-echo "Known as:" >> $Log
+echo -n "Known as: " >> $Log
 hostname  >> $Log
+echo -n "OS Version : " >>$Log
+cat /etc/os-release | grep PRETTY | cut -c14-43 >>$Log
+
+echo -n "Uptime: " >>$Log
+uptime >>$Log
 echo "Pi Details:" >> $Log
 cat /proc/cpuinfo >> $Log
 
@@ -148,13 +154,13 @@ echo "</system>">> $Log
 
 #lsusb data
 echo "<usb>" >> $Log
-echo "  LSUSB OUPUT:" >> $Log
+#echo "  LSUSB OUPUT:" >> $Log
 sudo lsusb >>  $Log
 echo "</usb>" >> $Log
 
 #lsmod data
 echo "<lsmod>" >> $Log
-echo "  LSMOD OUPUT:" >> $Log
+#echo "  LSMOD OUPUT:" >> $Log
 sudo lsmod >>  $Log
 echo "</lsmod>" >> $Log
 
