@@ -44,5 +44,5 @@ http://daemonforums.org/showthread.php?t=4054
 
 Future:
 1) Pass in runtime parameters to select the different or all commands. 
-2) Issue with pastebin seems to be && even after repalcing theis string with html &amp;
+
 
