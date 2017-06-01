@@ -37,9 +37,13 @@
 # more profressional. Also did an check on the lan configuration to see if Wifi  was set up.
 # Bumped to 2.0.7 3/26/17 some more formag tidying.
 # Bumped to 2.0.8 3/28/17 Added os release version and uptime count.
+# Bumped to 2.0.9 6/1/17 Added iwgetid to indicate the WIFI connected to. Fixed upload 
+# issue by making double ampersand and less than symbols words instead. The earlier
+# fix didn't help the pastebin upload.
 
 # Notes:
-# pastebin not getting a complete upload...
+# pastebin not getting a complete upload...  <- fixed 2.0.9!!!
+
 
 
 TODAY=`date +%F%M`
@@ -61,11 +65,11 @@ echo "<?xml-stylesheet type=\"text/xsl\" href=\"diagout.xsl\"?>" >>$Log
 #Opening tag
 echo "<log>" >>$Log
 echo "Log created on " `date` >>$Log
-echo "diag_info version = 2.0.8 " >> $Log
+echo "diag_info version = 2.0.9 " >> $Log
 
 #System name
 echo "<system>">> $Log
-echo -n "ON SYSTEM: " >>$Log
+echo -n " ON SYSTEM: " >>$Log
 uname -a  >> $Log
 echo -n "Known as: " >> $Log
 hostname  >> $Log
@@ -123,8 +127,7 @@ fi
 Php_ver=$(php -v 2>&1)
 if [ $? -eq 0 ] 
    then
-   echo -n "PHP Version: " >> $Log
-   php -v 2>&1 >> $Log
+   echo "PHP Version: " $Php_ver  >> $Log
    else
    echo "PHP not installed." >>$Log
 
@@ -182,6 +185,8 @@ if [ $? -eq 0 ]
    sleep 5
 # Above sleep added for P3.
    sudo iwlist wlan0 scan >>$Log
+   echo -n "Currently connected to WIFI: " >>$Log
+   sudo  iwgetid  -r  >> $Log
    else
    echo "No wlan0 configured. " >>$Log
 fi
@@ -192,7 +197,7 @@ echo "</wifi>" >>$Log
 echo "<SysLog>">> $Log
  
 # sed command to strip out lt and & issues
-tail -100 /var/log/syslog  | sed -e 's~&~\&amp;~g' -e 's~<~\&lt;~g' >> $Log
+tail -100 /var/log/syslog  | sed -e 's~&~\AND~g' -e 's~<~\LESSTHAN~g' >> $Log
 #echo $SysLog >> $Log
 echo "</SysLog>" >> $Log
 
@@ -200,7 +205,7 @@ echo "</SysLog>" >> $Log
 #dmesg data
 echo "<dmesg>" >> $Log
 echo " DMESG OUTPUT:  " >>$Log
-dmesg -l info | sed -e 's~&~\&amp;~g' -e 's~<~\&lt;~g'  >> $Log
+dmesg -l info | sed -e 's~&~\AND~g' -e 's~<~\LESSTHAN~g'  >> $Log
 echo "</dmesg>" >> $Log
 
 #/var/log/syslog last 100 lines only
