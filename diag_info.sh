@@ -46,7 +46,7 @@
 # s= system  plus software
 # h = simple help string.
 # This is now version 3.0.0
-
+# Adding Octoprint log 3.0.1 7/30/17
 
 # Notes:
 # pastebin not getting a complete upload...  <- fixed 2.0.9!!!
@@ -126,6 +126,11 @@ function system {
    	then
 
     		echo "Octoprint Version:"  `cat /etc/octopi_version`  >> $Log
+                echo " Current Octoprint Log: " >>$Log    
+                cat /home/pi/.octoprint/logs/octoprint.log >> $Log
+                echo "===End of Octoprint Log===" >> $Log
+
+
     	else
 
    		echo "Octoprint not installed." >> $Log 
@@ -201,9 +206,19 @@ function hardware {
 }
 
 function logs {
-	echo "logs"
+#	echo "Logs" >> $Log
+# Adding Octoprint to Log section if Octoprint is present
+	ls /etc/octopi_version 2>&1
 
-	echo "<SysLog>">> $Log
+        if [ $? -eq 0 ]
+        then
+
+                echo "Octoprint Version:"  `cat /etc/octopi_version`  >> $Log
+                echo " Current Octoprint Log: " >>$Log    
+                cat /home/pi/.octoprint/logs/octoprint.log >> $Log
+                echo "===End of Octoprint Log===" >> $Log
+        fi
+        echo "<SysLog>">> $Log
  
 # sed command to strip out lt and & issues
 	tail -100 /var/log/syslog  | sed -e 's~&~\AND~g' -e 's~<~\LESSTHAN~g' >> $Log
@@ -244,7 +259,7 @@ echo "<?xml-stylesheet type=\"text/xsl\" href=\"diagout.xsl\"?>" >>$Log
 #Opening tag
 echo "<log>" >>$Log
 echo "Log created on " `date` >>$Log
-echo "diag_info version = 3.0.0 " >> $Log
+echo "diag_info version = 3.0.1 " >> $Log
 
 
 
@@ -254,7 +269,8 @@ while getopts "h?ansil" opt; do
         echo "diag_info takes parameters: a = all; n= network; s= system ; i= hardware info, l = logs" 
         exit 0
         ;;
-    a)  system
+    a)  echo "All selected" >> $Log
+        system
 	hardware
 	network
 	logs
