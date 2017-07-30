@@ -19,6 +19,14 @@ You should see each section highlighted. If the format file is not there, then s
 browsers will diaplay the file with handles that allow the various sections to
 be collapsed for easier viewing.
 
+It has command line arguements now:
+a = all
+l = logs
+s = system
+i = hardware
+h = help
+
+
 
 The PASTEBIN upload code was leveraged from this program:
 
@@ -42,7 +50,6 @@ http://daemonforums.org/showthread.php?t=4054
 
 
 
-Future:
-1) Pass in runtime parameters to select the different or all commands. 
+
 
 
