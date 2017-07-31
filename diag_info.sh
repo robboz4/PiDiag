@@ -46,7 +46,8 @@
 # s= system  plus software
 # h = simple help string.
 # This is now version 3.0.0
-# Adding Octoprint log 3.0.1 7/30/17
+# Adding Octoprint log 3.0.1
+# Fixed Octoprint Version number search 3.0.2
 
 # Notes:
 # pastebin not getting a complete upload...  <- fixed 2.0.9!!!
@@ -100,7 +101,7 @@ function system {
 #echo "  LSMOD OUPUT:" >> $Log
 	sudo lsmod >>  $Log
 	echo "</lsmod>" >> $Log
-
+        echo "<software>" >> $Log
 # GPIO_ver=$(gpio -v 2>&1 | head -n1)
 	gpio -v 2>&1
 	if [ $? -ne 0 ] 
@@ -118,15 +119,16 @@ function system {
 #     gpio readall >> $Log
 
 	fi
-	echo "<software>" >> $Log
+#	echo "<software>" >> $Log
 
-	ls /etc/octopi_version 2>&1
-
+#	ls /etc/octopi_version 2>&1
+        ls ~/oprint/local/bin/octoprint 
 	if [ $? -eq 0 ]
    	then
 
-    		echo "Octoprint Version:"  `cat /etc/octopi_version`  >> $Log
-                echo " Current Octoprint Log: " >>$Log    
+#    		echo "Octoprint Version:"  `cat /etc/octopi_version`  >> $Log
+                echo "Octoprint Version: " `tail -2 ~/oprint/local/bin/octoprint | cut -c38-42` >> $Log
+#                echo " Current Octoprint Log: " >>$Log    
                 cat /home/pi/.octoprint/logs/octoprint.log >> $Log
                 echo "===End of Octoprint Log===" >> $Log
 
@@ -259,7 +261,7 @@ echo "<?xml-stylesheet type=\"text/xsl\" href=\"diagout.xsl\"?>" >>$Log
 #Opening tag
 echo "<log>" >>$Log
 echo "Log created on " `date` >>$Log
-echo "diag_info version = 3.0.1 " >> $Log
+echo "diag_info version = 3.0.2 " >> $Log
 
 
 
@@ -269,8 +271,7 @@ while getopts "h?ansil" opt; do
         echo "diag_info takes parameters: a = all; n= network; s= system ; i= hardware info, l = logs" 
         exit 0
         ;;
-    a)  echo "All selected" >> $Log
-        system
+    a)  system
 	hardware
 	network
 	logs
