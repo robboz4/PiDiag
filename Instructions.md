@@ -25,7 +25,7 @@ To run the file type:
 
 cd /boot ( or wherever the file was downloaded to )
 chmod +x diag_info.sh  
-sudo ./diag_info.sh
+sudo ./diag_info.sh (-ahsinl)
 
 The output file should be something like Diag201X-XX-XXX.txt
 
