@@ -25,6 +25,7 @@ l = logs
 s = system
 i = hardware
 h = help
+n = network
 
 
 
