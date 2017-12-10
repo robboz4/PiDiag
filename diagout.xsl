@@ -89,7 +89,7 @@
 <!--=========================================================================
     Dumps a section as a table.
 ============================================================================-->
-<xsl:template match="system|usb|lsmod|dmesg|ifconfig|wpa_cli|iwlist|SysLog" >
+<xsl:template match="system|usb|lsmod|dmesg|ifconfig|wpa_cli|iwlist|SysLog|log|software" >
     <p/><table>
         <tr><th>
             <xsl:value-of select='name(.)' /><xsl:value-of select='./@tag' />
