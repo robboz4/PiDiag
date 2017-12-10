@@ -48,11 +48,21 @@
 # This is now version 3.0.0
 # Adding Octoprint log 3.0.1
 # Fixed Octoprint Version number search 3.0.2
+# Below all added on 12/10/17
+# Fixed free command. the option -o has been removed.
+# Added node version.
+# Added homebridge version.
+# Added python version which I missed out from the beiggining - duh!
+# Added Vers variable for version reference to be used in help and the log file.
+# This is now version 3.0.3
+
+
 
 # Notes:
 # pastebin not getting a complete upload...  <- fixed 2.0.9!!!
 
 
+Vers=3.0.3
 
 # A POSIX variable
 OPTIND=1 
@@ -66,7 +76,8 @@ OPTIND=1
 
 if [[ $# -eq 0 ]]; then
        echo "diag_info takes parameters: h = help; a = all; n = network; s = system ; i = hardware info; l = logs" 
-       echo "Example diag_info  -s  would grab system information only." 
+       echo "Example diag_info  -s  would grab system and software information only." 
+       echo "Version: " $Vers
       exit 0
 fi
 # Start of functions:
@@ -85,7 +96,7 @@ function system {
 	echo -n "Uptime: " >>$Log
 	uptime >>$Log
 	echo "Memory free space  table : " >> $Log
-	free -o -h >> $Log
+	free  >> $Log
 	echo "Disk Space:" >> $Log
 	sudo df -h >> $Log 
 	echo "</system>">> $Log
@@ -158,7 +169,32 @@ function system {
 
 	fi
 
+        Node_ver=$(node --version 2>&1)
+	if [ $? -eq 0 ] 
+        then
+                echo "Node  Version: " $Node_ver  >> $Log
+        else
+                echo "node not installed." >>$Log
 
+        fi
+
+        HB_ver=$(homebridge --version)
+        if [ $? -eq 0 ] 
+        then
+                echo "Homebridge  Version: " $HB_ver  >> $Log
+        else
+                echo "homebridge  not installed." >>$Log
+
+        fi
+
+        Python_ver=$(python --version 2>&1 )
+        if [ $? -eq 0 ] 
+        then
+                echo "Python   Version: " $Python_ver  >> $Log
+        else
+                echo "Python  not installed." >>$Log
+
+        fi
 
 	echo "</software>" >>$Log
 }
@@ -261,7 +297,7 @@ echo "<?xml-stylesheet type=\"text/xsl\" href=\"diagout.xsl\"?>" >>$Log
 #Opening tag
 echo "<log>" >>$Log
 echo "Log created on " `date` >>$Log
-echo "diag_info version = 3.0.2 " >> $Log
+echo $Vers  >> $Log
 
 
 
@@ -275,14 +311,19 @@ while getopts "h?ansil" opt; do
 	hardware
 	network
 	logs
+        echo " Option = a; Collecting all information."  >>$Log
         ;;
     n)  network
+        echo " Option = n; Collecting network  information only."  >>$Log
         ;;
     i)  hardware
+        echo " Option = h; Collecting Pi hardware  information only."  >>$Log
         ;;
     s)  system
+        echo " Option = s; Collecting Pi system and software information."  >>$Log
         ;;
     l)  logs
+        echo " Option = l; Collecting log  information only."  >>$Log
         ;;
     esac
 done
