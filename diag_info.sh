@@ -55,6 +55,8 @@
 # Added python version which I missed out from the beiggining - duh!
 # Added Vers variable for version reference to be used in help and the log file.
 # This is now version 3.0.3
+# Added support for the MEGAIO board and test for I2C set up
+# This is now version 3.0.4
 
 
 
@@ -62,7 +64,7 @@
 # pastebin not getting a complete upload...  <- fixed 2.0.9!!!
 
 
-Vers=3.0.3
+Vers=3.0.4
 
 # A POSIX variable
 OPTIND=1 
@@ -112,7 +114,19 @@ function system {
 #echo "  LSMOD OUPUT:" >> $Log
 	sudo lsmod >>  $Log
 	echo "</lsmod>" >> $Log
-        echo "<software>" >> $Log
+
+#check for I2C
+    echo "<I2C>" >> $Log
+    sudo i2cdetect -y 1 2>&1
+    if [ $? -ne 0 ]
+    then
+            echo "I2C utilities not installed or I2C not set up." >> $Log
+    else
+           sudo i2cdetect -y 1  >> $Log
+    fi
+    echo "</I2C>" >> $Log
+		
+    echo "<software>" >> $Log
 # GPIO_ver=$(gpio -v 2>&1 | head -n1)
 	gpio -v 2>&1
 	if [ $? -ne 0 ] 
@@ -130,7 +144,31 @@ function system {
 #     gpio readall >> $Log
 
 	fi
-#	echo "<software>" >> $Log
+	
+#Check for megaio software  installation
+    echo "<megaio>" >> $Log
+    megaio -v 2>&1
+    if [ $? -ne 0 ]
+    then
+          echo "megaio software not installed" >> $Log
+    else
+          megaio -v >> $Log
+#Four boards maximum      
+          for ((i=0; i <4 ; i++))
+            do
+#             echo "Number $i:"
+             megaio  $i  board >> $Log
+         done      
+       
+       
+       
+       
+    fi
+    echo "</megaio>" >> $Log
+       
+       
+	
+	
 
 #	ls /etc/octopi_version 2>&1
         ls ~/oprint/local/bin/octoprint 
