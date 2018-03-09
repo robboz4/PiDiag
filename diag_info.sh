@@ -57,6 +57,8 @@
 # This is now version 3.0.3
 # Added support for the MEGAIO board and test for I2C set up
 # This is now version 3.0.4
+# Hardcoded path for Octoprint veriosn and logs to /home/pi
+# This  is now version 3.0.5
 
 
 
@@ -64,7 +66,7 @@
 # pastebin not getting a complete upload...  <- fixed 2.0.9!!!
 
 
-Vers=3.0.4
+Vers=3.0.5
 
 # A POSIX variable
 OPTIND=1 
@@ -171,15 +173,15 @@ function system {
 	
 
 #	ls /etc/octopi_version 2>&1
-        ls ~/oprint/local/bin/octoprint 
+        ls /home/pi/oprint/local/bin/octoprint 2>&1 
 	if [ $? -eq 0 ]
    	then
 
 #    		echo "Octoprint Version:"  `cat /etc/octopi_version`  >> $Log
-                echo "Octoprint Version: " `tail -2 ~/oprint/local/bin/octoprint | cut -c38-42` >> $Log
+                echo "Octoprint Version: " `tail -2 /home/pi/oprint/local/bin/octoprint | cut -c38-42` >> $Log
 #                echo " Current Octoprint Log: " >>$Log    
-                cat /home/pi/.octoprint/logs/octoprint.log >> $Log
-                echo "===End of Octoprint Log===" >> $Log
+#                cat /home/pi/.octoprint/logs/octoprint.log >> $Log
+#                echo "===End of Octoprint Log===" >> $Log
 
 
     	else
@@ -289,7 +291,7 @@ function logs {
         if [ $? -eq 0 ]
         then
 
-                echo "Octoprint Version:"  `cat /etc/octopi_version`  >> $Log
+#                echo "Octoprint Version:"  `cat /etc/octopi_version`  >> $Log
                 echo " Current Octoprint Log: " >>$Log    
                 cat /home/pi/.octoprint/logs/octoprint.log >> $Log
                 echo "===End of Octoprint Log===" >> $Log
