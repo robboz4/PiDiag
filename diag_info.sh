@@ -57,9 +57,8 @@
 # This is now version 3.0.3
 # Added support for the MEGAIO board and test for I2C set up
 # This is now version 3.0.4
-# Hardcoded path for Octoprint veriosn and logs to /home/pi
-# This  is now version 3.0.5
-
+# Added  homebridge config.json file and first 100 lines of the homebridge log can be huge.
+# 3/16/18  bumped to 3.0.5
 
 
 # Notes:
@@ -173,15 +172,15 @@ function system {
 	
 
 #	ls /etc/octopi_version 2>&1
-        ls /home/pi/oprint/local/bin/octoprint 2>&1 
+        ls ~/oprint/local/bin/octoprint 
 	if [ $? -eq 0 ]
    	then
 
 #    		echo "Octoprint Version:"  `cat /etc/octopi_version`  >> $Log
-                echo "Octoprint Version: " `tail -2 /home/pi/oprint/local/bin/octoprint | cut -c38-42` >> $Log
+                echo "Octoprint Version: " `tail -2 ~/oprint/local/bin/octoprint | cut -c38-42` >> $Log
 #                echo " Current Octoprint Log: " >>$Log    
-#                cat /home/pi/.octoprint/logs/octoprint.log >> $Log
-#                echo "===End of Octoprint Log===" >> $Log
+                cat /home/pi/.octoprint/logs/octoprint.log >> $Log
+                echo "===End of Octoprint Log===" >> $Log
 
 
     	else
@@ -225,6 +224,14 @@ function system {
         else
                 echo "homebridge  not installed." >>$Log
 
+        fi
+
+        ls /home/pi/.homebridge/config.json 2>&1
+        if [ $? -eq 0 ]
+        then
+                echo " Homebridge Config file found:" >> $Log
+                cat /home/pi/.homebridge/config.json >>  $Log
+                echo "===End of Homebridge config file ===" >> $Log
         fi
 
         Python_ver=$(python --version 2>&1 )
@@ -291,10 +298,18 @@ function logs {
         if [ $? -eq 0 ]
         then
 
-#                echo "Octoprint Version:"  `cat /etc/octopi_version`  >> $Log
+                echo "Octoprint Version:"  `cat /etc/octopi_version`  >> $Log
                 echo " Current Octoprint Log: " >>$Log    
                 cat /home/pi/.octoprint/logs/octoprint.log >> $Log
                 echo "===End of Octoprint Log===" >> $Log
+        fi
+        
+	ls /home/pi/homebridge.log 2>&1
+	if [ $? -eq 0 ]
+	then
+		echo " Homebridge Config file found copying first 100 lines:" >> $Log
+                head  -n100 /home/pi/homebridge.log >>  $Log
+               echo "===End of Homebridge config file ===" >> $Log
         fi
         echo "<SysLog>">> $Log
  
@@ -354,16 +369,16 @@ while getopts "h?ansil" opt; do
         echo " Option = a; Collecting all information."  >>$Log
         ;;
     n)  network
-        echo " Option = n; Collecting network  information only."  >>$Log
+        echo " Option = n; Collecting network  information."  >>$Log
         ;;
     i)  hardware
-        echo " Option = h; Collecting Pi hardware  information only."  >>$Log
+        echo " Option = h; Collecting Pi hardware  information."  >>$Log
         ;;
     s)  system
         echo " Option = s; Collecting Pi system and software information."  >>$Log
         ;;
     l)  logs
-        echo " Option = l; Collecting log  information only."  >>$Log
+        echo " Option = l; Collecting log  information."  >>$Log
         ;;
     esac
 done
