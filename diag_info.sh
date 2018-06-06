@@ -59,6 +59,9 @@
 # This is now version 3.0.4
 # Added  homebridge config.json file and first 100 lines of the homebridge log can be huge.
 # 3/16/18  bumped to 3.0.5
+# Testing Move to gitlab 6/6/18
+
+
 
 
 # Notes:
