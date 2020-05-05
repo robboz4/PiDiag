@@ -33,7 +33,7 @@
 #          works on Safari, but not on Chrome. The file must be in the same directory as the 
 #          xml file for it to format nicely. Also change the text (.txt) file to xml (.xml).
 # Bumped to 2.0.6 3/20/17 Added error checking to all commands to make the output  look
-# more profressional. Also did an check on the lan configuration to see if Wifi  was set up.
+# more profressional. Also did a check on the lan configuration to see if Wifi  was set up.
 # Bumped to 2.0.7 3/26/17 some more formag tidying.
 # Bumped to 2.0.8 3/28/17 Added os release version and uptime count.
 # Bumped to 2.0.9 6/1/17 Added iwgetid to indicate the WIFI connected to. Fixed upload 
@@ -52,31 +52,37 @@
 # Fixed free command. the option -o has been removed.
 # Added node version.
 # Added homebridge version.
-# Added python version which I missed out from the beiggining - duh!
+# Added python version which I missed out from the begining - duh!
 # Added Vers variable for version reference to be used in help and the log file.
 # This is now version 3.0.3
 # Added support for the MEGAIO board and test for I2C set up
 # This is now version 3.0.4
 # Added  homebridge config.json file and first 100 lines of the homebridge log can be huge.
 # 3/16/18  bumped to 3.0.5
-<<<<<<< HEAD
-# Gitlab Test from Github desktop client
-#
-#
-#
-#
-=======
-# Testing Move to gitlab 6/6/18
->>>>>>> afacfdf6771d3bd7cd717bf38dbbbdbadb7d442f
+# Added board type in hardware function for easier identification.
+# 8/17/18 bumped to 3.0.6
+# 9/17/18 Added extra Octoprint logs and tidied up some erroneous errors 
+# Made verison 3.0.7-Beta till finished testing on other Pi's ... No timeframe...
+# 9/23/18 Made changes to only add Octoprint and Homebridge logs in the logs request ( and all of course)
+# Did more rebust testing and removed output from commands that are tetsing for various installed software.
+# tested on Pi Modesl B, 3 and Zero W/
+# Moved Version to 3.0.8
+# Moved Version to 3.0.9 as the ping test for pastebin was missing! Can't seem to find the 
+# submission that removed it. Anyway it's back. The bug was that it tried to send the file to pastebin
+# even if there was no network. 
+# Moved to version 3.0.10 to remove pip list deprecation warning. Add --format=legacy 
+# Added npm version, added the ampersand and greater than fixer to the homebridge json config file when
+# writing to the log file. It caused another truncation of the output. 
+# Bumped version to 3.0.11  3/6/19
 
-
-
+#Testing out locating Homebridge config after brand new install 11/3/19
+# 12B added homebridge journal log
 
 # Notes:
 # pastebin not getting a complete upload...  <- fixed 2.0.9!!!
 
-
-Vers=3.0.5a
+# Moved file to temp directory for web testing
+Vers=3.0.12B
 
 # A POSIX variable
 OPTIND=1 
@@ -129,7 +135,7 @@ function system {
 
 #check for I2C
     echo "<I2C>" >> $Log
-    sudo i2cdetect -y 1 2>&1
+    IC=$(sudo i2cdetect -y 1 2>&1)
     if [ $? -ne 0 ]
     then
             echo "I2C utilities not installed or I2C not set up." >> $Log
@@ -159,7 +165,7 @@ function system {
 	
 #Check for megaio software  installation
     echo "<megaio>" >> $Log
-    megaio -v 2>&1
+    MG_IO=$(megaio -v 2>&1)
     if [ $? -ne 0 ]
     then
           echo "megaio software not installed" >> $Log
@@ -183,15 +189,26 @@ function system {
 	
 
 #	ls /etc/octopi_version 2>&1
-        ls ~/oprint/local/bin/octoprint 
+    Octo=$(ls /home/pi/oprint/local/bin/octoprint 2>&1)
 	if [ $? -eq 0 ]
    	then
 
 #    		echo "Octoprint Version:"  `cat /etc/octopi_version`  >> $Log
-                echo "Octoprint Version: " `tail -2 ~/oprint/local/bin/octoprint | cut -c38-42` >> $Log
+                echo "Octoprint Version: " `tail -2 /home/pi/oprint/local/bin/octoprint | cut -c38-42` >> $Log
+                echo "Octopi Version"   `cat /etc/octopi_version` >> $Log
 #                echo " Current Octoprint Log: " >>$Log    
-                cat /home/pi/.octoprint/logs/octoprint.log >> $Log
-                echo "===End of Octoprint Log===" >> $Log
+#                cat /home/pi/.octoprint/logs/octoprint.log >> $Log
+#                echo "===End of Octoprint Log===" >> $Log
+#                cat /home/pi/.octoprint/logs/serial.log >> $Log
+#                echo "===End of Serial Log===" >> $Log
+#                cat /home/pi/.octoprint/logs/plugin_cura_engine.log >> $Log
+#                echo "===End of Cura Log===" >> $Log
+#                cat /home/pi/.octoprint/logs/plugin_pluginmanager_console.log >> $Log
+#                echo "===End of Plugin Manager Log===" >> $Log
+#                cat /home/pi/.octoprint/logs/plugin_softwareupdate_console.log >> $Log
+#               echo "===End of Software Update Log===" >> $Log
+                
+                
 
 
     	else
@@ -219,31 +236,52 @@ function system {
 
 	fi
 
-        Node_ver=$(node --version 2>&1)
+    Node_ver=$(node --version 2>&1)
 	if [ $? -eq 0 ] 
-        then
-                echo "Node  Version: " $Node_ver  >> $Log
-        else
-                echo "node not installed." >>$Log
+    then
+            echo "Node  Version: " $Node_ver  >> $Log
+    else
+            echo "node not installed." >>$Log
 
-        fi
+    fi
+        
+        
+    npm_ver=$(npm -v  2>&1)
+    if [ $? -eq 0 ]
+    then
+            echo "npm version: " $npm_ver >> $Log
+    else
+            echo "npm not installed." >> $Log
+    fi
 
-        HB_ver=$(homebridge --version)
-        if [ $? -eq 0 ] 
-        then
-                echo "Homebridge  Version: " $HB_ver  >> $Log
-        else
-                echo "homebridge  not installed." >>$Log
+    HB_ver=$(homebridge --version 2>&1)
+    if [ $? -eq 0 ] 
+    then
+            echo "Homebridge  Version: " $HB_ver  >> $Log
+            HB_dir=$(grep HOMEBRIDG /etc/default/homebridge  | cut -c19-35 2>&1)
+#           echo $HB_dir
+#	    ls /home/pi/.homebridge/config.json 2>&1
+            ls  $HB_dir/config.json 2>&1
+            if [ $? -eq 0 ]
+                then
+                   echo "Homebridge Config file found:" >> $Log
+#                   cat /home/pi/.homebridge/config.json | sed -e 's~&~\AND~g' -e 's~<~\LESSTHAN~g' >>  $Log
+                   cat $HB_dir/config.json | sed -e 's~&~\AND~g' -e 's~<~\LESSTHAN~g' >>  $Log
+		   echo " Last 100 lines of journal log: " >> $Log
+		   HB_log=$(journalctl -u homebridge| tail -100 2>&1)
+		   echo $HB_log >> $Log
+               
+            else
+                   echo " No Homebridge config file found." >> $Log
+            fi
+            echo "===End of Homebridge config file ===" >> $Log
+        
+    else
+            echo "homebridge  not installed." >>$Log
 
-        fi
+    fi
 
-        ls /home/pi/.homebridge/config.json 2>&1
-        if [ $? -eq 0 ]
-        then
-                echo " Homebridge Config file found:" >> $Log
-                cat /home/pi/.homebridge/config.json >>  $Log
-                echo "===End of Homebridge config file ===" >> $Log
-        fi
+
 
         Python_ver=$(python --version 2>&1 )
         if [ $? -eq 0 ] 
@@ -251,6 +289,39 @@ function system {
                 echo "Python   Version: " $Python_ver  >> $Log
         else
                 echo "Python  not installed." >>$Log
+
+        fi
+        Pip_ver=$(pip --version 2>&1)
+        if [ $? -eq 0 ] 
+        then
+                echo "pip   Version: " $Pip_ver  >> $Log
+                echo "Installed libraries:" >> $Log
+                pip list --format=legacy >> $Log
+                echo "=====" >> $Log
+        else
+                echo "pip  not installed." >>$Log
+
+        fi
+
+        Python3_ver=$(python3 --version 2>&1 )
+        if [ $? -eq 0 ] 
+        then
+                echo "Python3   Version: " $Python3_ver  >> $Log
+        else
+                echo "Python3  not installed." >>$Log
+
+        fi
+
+
+        Pip3_ver=$(pip3 --version 2>&1)
+        if [ $? -eq 0 ] 
+        then
+                echo "pip3   Version: " $Pip3_ver  >> $Log
+                echo "Installed libraries:" >> $Log
+                pip3 list --format=legacy   >> $Log
+                echo "=====" >> $Log
+        else
+                echo "pip3  not installed." >>$Log
 
         fi
 
@@ -292,6 +363,8 @@ function network  {
 function hardware {
 	echo "<hardware>" >> $Log
 	echo "Pi Details:" >> $Log
+	cat /sys/firmware/devicetree/base/model >> $Log
+    echo >> $Log
 	cat /proc/cpuinfo >> $Log
 
 	echo -n "CPU  " >> $Log
@@ -304,18 +377,27 @@ function hardware {
 function logs {
 #	echo "Logs" >> $Log
 # Adding Octoprint to Log section if Octoprint is present
-	ls /etc/octopi_version 2>&1
-
+	
+        Oct_Log=$(cat /home/pi/oprint/local/bin/octoprint 2>&1)
         if [ $? -eq 0 ]
         then
 
-                echo "Octoprint Version:"  `cat /etc/octopi_version`  >> $Log
-                echo " Current Octoprint Log: " >>$Log    
+                echo "Octoprint Version: " `tail -2 /home/pi/oprint/local/bin/octoprint | cut -c38-42` >> $Log
+#                echo " Current Octoprint Log: " >>$Log    
+                echo "Octopi Version"   `cat /etc/octopi_version` >> $Log
                 cat /home/pi/.octoprint/logs/octoprint.log >> $Log
                 echo "===End of Octoprint Log===" >> $Log
+                cat /home/pi/.octoprint/logs/serial.log >> $Log
+                echo "===End of Serial Log===" >> $Log
+                cat /home/pi/.octoprint/logs/plugin_cura_engine.log >> $Log
+                echo "===End of Cura Log===" >> $Log
+                cat /home/pi/.octoprint/logs/plugin_pluginmanager_console.log >> $Log
+                echo "===End of Plugin Manager Log===" >> $Log
+                cat /home/pi/.octoprint/logs/plugin_softwareupdate_console.log >> $Log
+                echo "===End of Software Update Log===" >> $Log
         fi
         
-	ls /home/pi/homebridge.log 2>&1
+	HBConfig=$(ls /home/pi/homebridge.log 2>&1)
 	if [ $? -eq 0 ]
 	then
 		echo " Homebridge Config file found copying first 100 lines:" >> $Log
@@ -346,15 +428,16 @@ function logs {
 
 TODAY=`date +%F%M`
 #Used to generate a sudo unique file name
-Log="Diagout$TODAY.xml"
+Log="/tmp/Diagout$TODAY.xml"
 PASTEBIN_Name="Diagout$TODAY."
 echo "This program can create a large file that might not get fully uploaded to pastebin."
 echo "Please keep the file in case the requester needs information that did not get to pastebin."
-echo "Starting to collect data to file " $Log
 
+echo "Depending on installed programs and  libraries it may take a few minutes to complete."
+echo "Starting to collect data to file " $Log
 #Creates file with xml head
 
-echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" >$Log
+echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" >>$Log
 echo "<?xml-stylesheet type=\"text/xsl\" href=\"diagout.xsl\"?>" >>$Log
 
 
@@ -406,6 +489,8 @@ echo " End of data captured. " >> $Log
 echo "</log>" >> $Log
 
 Result=$(ping -c 2 -t 30 www.pastebin.com )
+
+# Added extra time as pining www.pastebin.com became sluggish during coding.
 if [ $? -eq 0 ]
 then
         echo "Ping successful we have network! "
