@@ -68,7 +68,7 @@
 # pastebin not getting a complete upload...  <- fixed 2.0.9!!!
 
 
-Vers=3.0.5
+Vers=3.0.5a
 
 # A POSIX variable
 OPTIND=1 
@@ -396,6 +396,8 @@ echo " End of data captured. " >> $Log
 
 #Closing tag
 echo "</log>" >> $Log
+
+Result=$(ping -c 2 -t 30 www.pastebin.com )
 if [ $? -eq 0 ]
 then
         echo "Ping successful we have network! "
