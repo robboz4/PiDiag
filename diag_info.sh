@@ -59,11 +59,15 @@
 # This is now version 3.0.4
 # Added  homebridge config.json file and first 100 lines of the homebridge log can be huge.
 # 3/16/18  bumped to 3.0.5
+<<<<<<< HEAD
 # Gitlab Test from Github desktop client
 #
 #
 #
 #
+=======
+# Testing Move to gitlab 6/6/18
+>>>>>>> afacfdf6771d3bd7cd717bf38dbbbdbadb7d442f
 
 
 
@@ -72,7 +76,7 @@
 # pastebin not getting a complete upload...  <- fixed 2.0.9!!!
 
 
-Vers=3.0.5
+Vers=3.0.5a
 
 # A POSIX variable
 OPTIND=1 
@@ -400,6 +404,8 @@ echo " End of data captured. " >> $Log
 
 #Closing tag
 echo "</log>" >> $Log
+
+Result=$(ping -c 2 -t 30 www.pastebin.com )
 if [ $? -eq 0 ]
 then
         echo "Ping successful we have network! "
