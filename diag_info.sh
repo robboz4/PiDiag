@@ -77,12 +77,13 @@
 
 #Testing out locating Homebridge config after brand new install 11/3/19
 # 12B added homebridge journal log
+# 12C fixed Homebridge path and removed pip --format-legacy 5/5/2020
 
 # Notes:
 # pastebin not getting a complete upload...  <- fixed 2.0.9!!!
 
 # Moved file to temp directory for web testing
-Vers=3.0.12B
+Vers=3.0.12C
 
 # A POSIX variable
 OPTIND=1 
@@ -258,7 +259,7 @@ function system {
     if [ $? -eq 0 ] 
     then
             echo "Homebridge  Version: " $HB_ver  >> $Log
-            HB_dir=$(grep HOMEBRIDG /etc/default/homebridge  | cut -c19-35 2>&1)
+            HB_dir=$(grep HOMEBRIDG /etc/default/homebridge  | cut -c20-34 2>&1)
 #           echo $HB_dir
 #	    ls /home/pi/.homebridge/config.json 2>&1
             ls  $HB_dir/config.json 2>&1
@@ -296,7 +297,7 @@ function system {
         then
                 echo "pip   Version: " $Pip_ver  >> $Log
                 echo "Installed libraries:" >> $Log
-                pip list --format=legacy >> $Log
+                pip list >> $Log
                 echo "=====" >> $Log
         else
                 echo "pip  not installed." >>$Log
@@ -318,7 +319,7 @@ function system {
         then
                 echo "pip3   Version: " $Pip3_ver  >> $Log
                 echo "Installed libraries:" >> $Log
-                pip3 list --format=legacy   >> $Log
+                pip3 list   >> $Log
                 echo "=====" >> $Log
         else
                 echo "pip3  not installed." >>$Log
