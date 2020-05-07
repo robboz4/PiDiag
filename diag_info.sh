@@ -78,12 +78,13 @@
 #Testing out locating Homebridge config after brand new install 11/3/19
 # 12B added homebridge journal log
 # 12C fixed Homebridge path and removed pip --format-legacy 5/5/2020
+# 12D added apache2 access and error logs ( tail only)
 
 # Notes:
 # pastebin not getting a complete upload...  <- fixed 2.0.9!!!
 
 # Moved file to temp directory for web testing
-Vers=3.0.12C
+Vers=3.0.12D
 
 # A POSIX variable
 OPTIND=1 
@@ -222,9 +223,18 @@ function system {
 
 	if [ $? -eq 0 ] 
    	then
-   	echo "Apache version: " $Apache_ver    >> $Log
+   		echo "Apache version: " $Apache_ver    >> $Log
+   		Acc_log=$(tail /var/log/apache2/access.log 2>&1)
+	 	echo "Apache2 access log (tail):" >> $Log
+	 	echo $Acc_log >> $Log
+        echo  "----" >> $Log
+	 	Err_log=$(tail /var/log/apache2/error.log 2>&1)
+	 	echo "Apache2 error log (tail): " >> $Log
+	 	echo $Err_log  >> $Log
+        echo  "----" >> $Log
    	else
    		echo "Apache not installed. " >>$Log
+   		
 
 	fi
 
