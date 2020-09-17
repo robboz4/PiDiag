@@ -79,12 +79,14 @@
 # 12B added homebridge journal log
 # 12C fixed Homebridge path and removed pip --format-legacy 5/5/2020
 # 12D added apache2 access and error logs ( tail only)
+# 12E Changed http to https for pastebin.com upload
+
 
 # Notes:
 # pastebin not getting a complete upload...  <- fixed 2.0.9!!!
 
 # Moved file to temp directory for web testing
-Vers=3.0.12D
+Vers=3.0.12E
 
 # A POSIX variable
 OPTIND=1 
@@ -521,7 +523,7 @@ then
 
 	querystring="api_option=paste&api_dev_key=${API_DEV_KEY}&api_user_key=${API_USER_KEY}&api_paste_expire_date=${EXPIRE_DATE}&api_paste_private=${PRIVATE}&api_paste_code=${INPUT}&api_paste_name=${NAME}${FORMAT}"
 
-    	Paste_url=$(curl -d "${querystring}" http://pastebin.com/api/api_post.php )
+    	Paste_url=$(curl -d "${querystring}" https://pastebin.com/api/api_post.php )
 
     	echo "Please pass this url to the requester of the information." $Paste_url
     	echo " The whole file may not get transmitted to pastebin. So please save it in case the requester needs more information"
